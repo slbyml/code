@@ -1,4 +1,5 @@
 import Dep from "./dep"
+import util from "./util"
 /**
  * watch方法
  * 链接模板和数据
@@ -22,11 +23,6 @@ export default class watcher{
   }
   // 获取key对应的val,此时会触发getter,会将当前的dom对应的watcher放在对应的key所在的发布订阅模式中
   getVal() {
-    let val = this.vm
-    let arr = this.exp.split(".")
-    arr.forEach( key => {
-      val = val[key]
-    })
-    return val
+    return util.getVMVal(this.vm, this.exp)
   }
 }
