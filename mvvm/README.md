@@ -30,8 +30,8 @@
 </script>
 ```
 流程：
-![img1][assets/1.png]
-Compile：
+![img1](assets/1.png)
 
-![img2][assets/2.png]
+Compile：
+![img2](assets/2.png)
 
