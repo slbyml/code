@@ -30,7 +30,7 @@ export default class Complite{
     Array.from(el.childNodes).forEach(node => {
       const text= node.textContent
       if (this.isTextNode(node) && reg.test(text)) {  // 文本节点，可能有·v-·这种指令     
-        this.compileText(node, text, reg)
+        this.compileText(this.$vm, node, text, reg)
       } else if (this.isElementNode(node)) {   // 元素节点
         this.compileNode(node)
       }
@@ -57,13 +57,20 @@ export default class Complite{
     })    
   }
   // 替换文本节点
-  compileText(node, text, reg) {
-    const val = util.getVMVal(this.$vm, RegExp.$1)
-    new Watcher(this.$vm, RegExp.$1, newVal => {
-      updater.text(node, text, reg, newVal)
-    })
-    updater.text(node, text, reg, val)
-
+  compileText(vm, node, text, reg) {
+    // const val = util.getVMVal(this.$vm, RegExp.$1)
+    // new Watcher(this.$vm, RegExp.$1, newVal => {
+    //   updater.text(node, text, reg, newVal)
+    // })
+    // updater.text(node, text, reg, val)
+    !function replaceTxt() {
+      node.textContent = text.replace(reg, (matched, placeholder) => {
+        // console.log(matched, placeholder);
+        new Watcher(vm, placeholder, replaceTxt)
+        return util.getVMVal(vm, placeholder)
+      })
+    }();
+    
   }
   // 判断是否是元素节点
   isElementNode(node) {
@@ -121,9 +128,9 @@ const directiveUtil = {
 // 数据更新
 const updater = {
   // 文本替换
-  text(node, text, reg, newVal) {
-    node.textContent = text.replace(reg, newVal)
-  },
+  // text(node, text, reg, newVal) {
+  //   node.textContent = text.replace(reg, newVal)
+  // },
   // v-model
   model(node, newVal) {
     node.value = typeof newVal == 'undefined' ? '' : newVal;
