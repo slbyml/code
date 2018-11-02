@@ -18,10 +18,17 @@ import {update} from "./update"
 // ]);
 
 const el = document.getElementById('app')
-const vnode = createElement("div", {class: "testing"}, [
-  createElement("p", {class: "demo"}, ['testingingigngn']),
-  createElement("span", {class: "demo"}, ['123123123']),
-
+const vnode = createElement("div", {class: "test", attrs: {id: "testing"}}, [
+  createElement("p", {class: "demo", style: {fontSize: "12px"}}, ['testingingigngn']),
+  createElement("span", {class: "demo"}, ['123123123'])
 ])
 
 update(el, vnode)
+
+document.querySelector(".test1").addEventListener("click",() => {
+  const vnode1 = createElement("div", {class: "test", attrs: {id: "testing"}}, [
+    createElement("p", {class: "demo", style: {fontSize: "12px"}}, ['testingingigngn']),
+    createElement("span", {class: "demo"}, ['123123123'])
+  ])
+  update(el, vnode1, vnode)
+})

@@ -65,3 +65,16 @@ var isSVG = makeMap(
 export function isReservedTag(tag) {
   return isHTMLTag(tag) || isSVG(tag)
 }
+// 判断是否是val只为boolean的元素
+export const isBooleanAttr = makeMap(
+  'allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare,' +
+  'default,defaultchecked,defaultmuted,defaultselected,defer,disabled,' +
+  'enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,' +
+  'muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,' +
+  'required,reversed,scoped,seamless,selected,sortable,translate,' +
+  'truespeed,typemustmatch,visible'
+)
+// e.g. <option disabled>Select one</option>
+export const isFalsyAttrValue = (val) => {
+  return val == null || val === false
+}
