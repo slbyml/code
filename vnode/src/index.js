@@ -20,7 +20,7 @@ import {update} from "./update"
 const el = document.getElementById('app')
 const vnode = createElement("div", {class: "test", attrs: {id: "testing"}}, [
   createElement("p", {class: "demo", style: {fontSize: "12px"}}, ['testingingigngn']),
-  createElement("span", {class: "demo"}, ['123123123'])
+  createElement("span", {class: "demo"}, ['111111'])
 ])
 
 update(el, vnode)
@@ -28,7 +28,8 @@ update(el, vnode)
 document.querySelector(".test1").addEventListener("click",() => {
   const vnode1 = createElement("div", {class: "test", attrs: {id: "testing"}}, [
     createElement("p", {class: "demo", style: {fontSize: "12px"}}, ['testingingigngn']),
-    createElement("span", {class: "demo"}, ['123123123'])
+    createElement("p", {class: "demo111"}, ['222222']),
+    createElement("span", {class: "demo"}, ['111111'])
   ])
   update(el, vnode1, vnode)
 })

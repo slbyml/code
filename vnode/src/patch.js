@@ -66,13 +66,14 @@ function createPatchFunction() {
    */
   
   function createElm (vnode, insertedVnodeQueue, parentElm, refElm, nested, ownerArray, index) {
-    // 克隆??????????????
+    // 如果新虚拟节点存在真实DOM元素和ownerArray，
+    // 则代表它在之前的渲染中用过。
+    // 现在要被用作新节点时有潜在的错误
+    // 所以将它改为从本身克隆的节点
     if (isDef(vnode.elm) && isDef(ownerArray)) {
       vnode = ownerArray[index] = cloneVNode(vnode)
     }
-    /*insertedVnodeQueue为空数组[]的时候isRootInsert标志为true*/
-    vnode.isRootInsert = !nested
-
+    
     const data = vnode.data
     const children = vnode.children
     const tag = vnode.tag
@@ -173,6 +174,26 @@ function createPatchFunction() {
       }
     }
   }
+  
+  //生产key与vnode的key的映射哈希表
+  //比如childre是这样的 [{xx: xx, key: 'keya'}, {xx: xx, key: 'keyb'}, {xx: xx, key: 'keyc'}]  beginIdx = 0   endIdx = 2  
+  //结果生成{keya: 0, keyb: 1, keyc: 2}
+  function createKeyToOldIdx(children, beginIdx, endIdx) {
+    let i, key
+    const map = {}
+    for (i=beginIdx; i<=endIdx; ++i) {
+      key = children[i].key
+      if(isDef(key)) map[key] = i
+    }
+  }
+  
+  // 
+  function findIdxInOld (node, oldCh, start, end) {
+    for (let i = start; i < end; i++) {
+      const c = oldCh[i]
+      if (isDef(c) && sameVnode(node, c)) return i
+    }
+  }
 
   // 挂载data里面的属性
   function createProp (oldNode, vnode) {
@@ -221,10 +242,43 @@ function createPatchFunction() {
         oldEndVnode = oldCh[--oldEndIdx]
         newStartVnode = newCh[++newStartIdx]
       } else {
-
+        // 检测重复的key
+        // 创建vnode的key；eq：{key: 0, key: 1, key: 2}}
+        if (isUndef(oldKeyToIdx))  oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx)
+        // 如果newStartVnode(新的VNode节点)存在key并且这个key在oldVnode中能找到，则idxInOld等于oldKeyToIdx中对应key的索引
+        // 否则寻找旧节点数组中与当前newStartVnode(新的VNode节点)相同的节点索引赋予idxInOld
+        idxInOld = isDef(newStartVnode.key) ? oldKeyToIdx[newStartVnode.key] : findIdxInOld(newStartVnode, oldCh, oldStartIdx, oldEndIdx)
+        if (isUndef(idxInOld)) {
+          // 如果没有找到这个key,则创建这个节点
+          createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm)
+        } else {
+          // 在旧节点数组中找到了相应的节点的索引时，则移动节点
+          // 将vnodeToMove赋值为相应的节点
+          vnodeToMove = oldCh[idxInOld]
+          if (sameVnode(vnodeToMove, newStartVnode)) {
+            // 如果相同，则继续对比子级
+            patchVnode(vnodeToMove, newStartVnode, insertedVnodeQueue)
+             // 将旧节点数组中的该节点设置为undefined
+            oldCh[idxInOld] = undefined
+            // 移动找到的节点到当前旧首节点之前
+            nodeOps.insertBefore(parentElm, vnodeToMove.elm, oldStartVnode.elm)
+          } else {
+            // 如不同，则说明虽然key相同，但是不同元素，当作新元素处理
+            createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm, false, newCh, newStartIdx)
+          }
+        }
+        newStartVnode = newCh[++newStartIdx]
       }
     }
-
+    // 新旧节点开始索引任一方大于其结束索引时结束循环
+    if (oldStartIdx > oldEndIdx) {
+      /*如果oldStartIdx > oldEndIdx的话，说明老节点已经遍历完了，新节点比老节点多，所以这时候多出来的新节点需要一个一个创建出来加入到真实Dom中*/
+      refElm = isUndef(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1].elm
+      addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue)
+    } else if (newStartIdx > newEndIdx) {
+      /*如果newStartIdx > newEndIdx，说明新节点已经遍历完了，老节点多余新节点，则在父级中移除未处理的剩余旧节点，范围是oldStartIdx~oldEndIdx*/
+      removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx)
+    }
   }
 
   // 补丁vnode
@@ -237,6 +291,7 @@ function createPatchFunction() {
     const oldCh = oldVnode.children
     const ch = vnode.children
 
+    // 初始化标签属性
     if (isDef(vnode.data) && isDef(vnode.tag)) {
       createProp(oldVnode, vnode)
     }
@@ -278,11 +333,11 @@ function createPatchFunction() {
       createElm(vnode, insertedVnodeQueue)
     } else {
       const isRealElement = isDef(oldVnode.nodeType) // 判断是否是真实node,第一次渲染是必定是真实node
-      // 如果是两个vnode，且是根相同则执行diff计算
+      // 如果是两个vnode，且相同则执行diff计算
       if (!isRealElement && sameVnode(oldVnode, vnode)) { 
         patchVnode(oldVnode, vnode, insertedVnodeQueue, removeOnly)
       } else {
-        if (isRealElement) {  // 如果是真实node 则转换成vnode
+        if (isRealElement) {  // 如果是真实node 则转换成空vnode
           oldVnode = emptyNodeAt(oldVnode)
         }
         const oldElm = oldVnode.elm
@@ -299,6 +354,7 @@ function createPatchFunction() {
       }
     }
 
+    return vnode.elm
   }
 }
 

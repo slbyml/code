@@ -12,7 +12,7 @@ export  default class VNode {
   }
 }
 
-export const createEmptyVNode = (test = "") => {
+export const createEmptyVNode = (text = "") => {
   const node = new VNode()
   node.text = text
   return node
