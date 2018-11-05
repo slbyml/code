@@ -18,18 +18,34 @@ import {update} from "./update"
 // ]);
 
 const el = document.getElementById('app')
-const vnode = createElement("div", {class: "test", attrs: {id: "testing"}}, [
-  createElement("p", {class: "demo", style: {fontSize: "12px"}}, ['testingingigngn']),
-  createElement("span", {class: "demo"}, ['111111'])
-])
+// const vnode = createElement("div", {class: "test", attrs: {id: "testing"}}, [
+//   createElement("p", {class: "demo", style: {fontSize: "12px"}}, ['testingingigngn']),
+//   createElement("span", {class: "demo"}, ['111111'])
+// ])
+const vnode = createElement('div', { attrs:{id: 'app'} }, [
+  createElement('p', {style: {color: "red"}}, ['p标签']),
+  createElement('ul', {class: "box"}, [
+    createElement('li', { key: '1', class: 'item'}, ['li标签1']),
+    createElement('li', { key: '2', class: 'item'}, ['li标签2']),
+    createElement('li', { key: '3', class: 'item'}, ['li标签3']),
+    createElement('li', { key: '4', class: 'item'}, ['li标签4']),
+    createElement('li', { key: '5', class: 'item'}, ['li标签5']),
+  ]),
+]);
+console.log(vnode);
 
 update(el, vnode)
 
 document.querySelector(".test1").addEventListener("click",() => {
-  const vnode1 = createElement("div", {class: "test", attrs: {id: "testing"}}, [
-    createElement("p", {class: "demo", style: {fontSize: "12px"}}, ['testingingigngn']),
-    createElement("p", {class: "demo111"}, ['222222']),
-    createElement("span", {class: "demo"}, ['111111'])
+  const vnode1 = createElement('div', { attrs:{id: 'app'} }, [
+    createElement('p', {style: {color: "red"}}, ['p标签']),
+    createElement('ul', {class: "box"}, [
+      createElement('li', { key: '1', class: 'item'}, ['li标签1']),
+      createElement('li', { key: '2', class: 'item'}, ['li标签333']),
+      createElement('li', { key: '3', class: 'item'}, ['li标签3']),
+      createElement('li', { key: '4', class: 'item'}, ['li标签4']),
+      createElement('li', { key: '5', class: 'item'}, ['li标签5']),
+    ]),
   ])
   update(el, vnode1, vnode)
 })

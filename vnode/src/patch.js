@@ -286,7 +286,7 @@ function createPatchFunction() {
     if (oldVnode === vnode) {
       return
     }
-
+    // 让vnode.el引用到现在的真实dom，当el修改时，vnode.el会同步变化。
     const elm = vnode.elm = oldVnode.elm
     const oldCh = oldVnode.children
     const ch = vnode.children
