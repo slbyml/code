@@ -185,6 +185,7 @@ function createPatchFunction() {
       key = children[i].key
       if(isDef(key)) map[key] = i
     }
+    return map
   }
   
   // 
@@ -213,7 +214,6 @@ function createPatchFunction() {
     let newStartVnode = newCh[0]
     let newEndVnode = newCh[newEndIdx]
     let oldKeyToIdx, idxInOld, vnodeToMove, refElm
-
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (isUndef(oldStartVnode)) {
         oldStartVnode = oldCh[++oldStartIdx]
@@ -328,7 +328,6 @@ function createPatchFunction() {
    */
   return function patch (oldVnode, vnode, hydrating, removeOnly, parentElm, refElm) {
     const insertedVnodeQueue = []
-
     if (isUndef(oldVnode)) {  // oldVnode未定义的时候，其实也就是root节点，创建一个新的节点
       createElm(vnode, insertedVnodeQueue)
     } else {
