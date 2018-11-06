@@ -164,7 +164,7 @@ function createPatchFunction() {
       const key = vnode.key
       if (isDef(key)) {
         if (seenKeys[key]) {  // 例如：v-for的key已经存在，则报错
-          warn(
+          console.error(
             `Duplicate keys detected: '${key}'. This may cause an update error.`,
             vnode.context
           )
