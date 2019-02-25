@@ -1,0 +1,24 @@
+{
+  "name": "mywebpack",
+  "version": "1.0.0",
+  "description": "webpack",
+  "main": "index.js",
+  "bin": {
+    "mywebpack": "./bin/mywebpack.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/generator": "^7.3.3",
+    "@babel/traverse": "^7.2.3",
+    "@babel/types": "^7.3.3",
+    "babylon": "^6.18.0"
+  },
+  "dependencies": {
+    "less": "^3.9.0",
+    "tapable": "^1.1.1"
+  }
+}
