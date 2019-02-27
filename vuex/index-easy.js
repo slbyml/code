@@ -1,0 +1,88 @@
+let Vue;
+class Store {
+  constructor(options) {
+    let state = options.state;
+    this.getters = {};
+    this.mutations = {};
+    this.actions = {};
+
+    // state
+    this._vm = new Vue({
+      data: {
+        state
+      }
+    });
+
+    // getter
+    if (options.getters) {
+      let getters = options.getters;
+      forEach(getters, (getterName, getterFn) => {
+        Object.defineProperty(this.getters, getterName, {
+          get() {
+            return getterFn(state);
+          }
+        });
+      });
+    }
+
+    // mutations
+    let mutations = options.mutations;
+    forEach(mutations, (mutationName, mutationFn) => {
+      this.mutations[mutationName] = () => {
+        console.log(state);
+
+        mutationFn.call(this, state);
+      };
+    });
+
+    // actions
+    let actions = options.actions;
+    forEach(actions, (actionName, actionFn) => {
+      this.actions[actionName] = () => {
+        actionFn.call(this, this);
+      };
+    });
+
+    // 再异步调用的时候this指向永远是Store
+    let { commit, dispatch } = this;
+    this.commit = type => {
+      commit.call(this, type);
+    };
+    this.dispatch = type => {
+      dispatch.call(this, type);
+    };
+  }
+  get state() {
+    return this._vm.state;
+  }
+  commit(type) {
+    this.mutations[type]();
+  }
+  dispatch(type) {
+    this.actions[type]();
+  }
+}
+
+function forEach(obj, cb) {
+  Object.keys(obj).forEach(item => cb(item, obj[item]));
+}
+
+let install = _Vue => {
+  Vue = _Vue;
+  Vue.mixin({
+    beforeCreate() {
+      // 判断是否是跟组件
+      if (this.$options && this.$options.store) {
+        this.$store = this.$options.store;
+      } else {
+        // 子组件挂载$store
+        this.$store = this.$parent && this.$parent.$store;
+      }
+    }
+  });
+};
+
+export default {
+  Store,
+  install
+};
