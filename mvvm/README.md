@@ -37,3 +37,7 @@ Compile：
 
 ![img2](assets/2.png)
 
+
+### computed原理
+[分析1](https://segmentfault.com/a/1190000011912328)
+[分析2](https://segmentfault.com/a/1190000010408657#articleHeader0)
