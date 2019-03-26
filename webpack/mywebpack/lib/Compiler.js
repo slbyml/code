@@ -74,7 +74,7 @@ class Compiler {
   buildModule(modulePath, isEntry) {
     let source = this.getSource(modulePath)
 
-    //获取模块id 及打包后的key
+    //获取模块id 及打包后的key  相对路径
     let moduleName = './' + path.relative(this.root, modulePath)
 
     if (isEntry) {
