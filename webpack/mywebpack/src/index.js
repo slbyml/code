@@ -1,5 +1,5 @@
-const test = require('./test')
+const square = require('./square')
 require('./index.less')
 
-console.log(test(1));
+console.log(square(1));
 

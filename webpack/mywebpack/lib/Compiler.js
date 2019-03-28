@@ -1,7 +1,9 @@
 let fs = require('fs')
 let path = require("path")
 // 将源码转换成AST
-let babylon = require('babylon')
+// let babylon = require('babylon')
+const parseAst = require('@babel/parser')
+
 // 遍历节点
 let traverse = require('@babel/traverse').default
 // traverse
@@ -96,7 +98,7 @@ class Compiler {
    * @param {*} parentPath 父路径（./src）
    */
   parse(source, parentPath) {
-    let ast = babylon.parse(source)
+    let ast = parseAst.parse(source)
     let dependencies = []
     traverse(ast, {
       CallExpression(p) {

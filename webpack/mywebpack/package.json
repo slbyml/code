@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/generator": "^7.3.3",
+    "@babel/parser": "^7.4.2",
     "@babel/traverse": "^7.2.3",
     "@babel/types": "^7.3.3",
     "babylon": "^6.18.0"
