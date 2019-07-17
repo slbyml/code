@@ -8,7 +8,9 @@ class PromiseA {
         }
     }
     if(init){
+      setTimeout(() => { // 为了支持同步任务
         init(resolve,reject);
+      })  
     }
   }
   then(onFulfill,onReject) {
