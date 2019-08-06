@@ -37,7 +37,7 @@ class Store {
     // state
     this._vm = new Vue({
       data: {
-        state
+        state // 把state变成响应式的 
       }
     });
 
@@ -69,8 +69,8 @@ class Store {
     // actions
     let actions = options.actions;
     forEach(actions, (actionName, actionFn) => {
-      this.actions[actionName] = () => {
-        actionFn.call(this, this);
+      this.actions[actionName] = (payLoad) => {
+        actionFn.call(this, payLoad);
       };
     });
 
@@ -89,8 +89,8 @@ class Store {
   commit(type) {
     this.mutations[type]();
   }
-  dispatch(type) {
-    this.actions[type]();
+  dispatch(type, payLoad) {
+    this.actions[type](payLoad);
   }
 }
 

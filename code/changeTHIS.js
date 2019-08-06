@@ -29,3 +29,7 @@ Function.prototype.bind2 = () => {
       return _self.apply(ctx,args.concat(Array.from(arguments)))
   }
 }
+
+Function.prototype.bind22 = function(ctx, ...arg1) {
+  return (...arg2) => this.call(ctx, ...arg1, ...arg2)
+}
