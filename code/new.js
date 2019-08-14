@@ -5,9 +5,9 @@
 // 3，我们将Base函数对象的this指针替换成obj，然后再调用Base函数，于是我们就给obj对象赋值了一个id成员变量，这个成员变量的值是”base”
 // 4，如果有返回且返回为对象，则返回，如果没有，则默认返回原对象
 
-function New(fun) {
+function New(Base) {
   var obj  = {}; 
-  if (func.prototype !== null) {
+  if (Base.prototype !== null) {
     obj.__proto__ = Base.prototype; 
   }
   var ret = Base.call(obj);  

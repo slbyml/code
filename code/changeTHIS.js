@@ -26,7 +26,7 @@ Function.prototype.bind2 = () => {
   const args=Array.from(arguments)
   const ctx=args.shift()
   return function(){
-      return _self.apply(ctx,args.concat(Array.from(arguments)))
+    return _self.apply(ctx,args.concat(Array.from(arguments)))
   }
 }
 

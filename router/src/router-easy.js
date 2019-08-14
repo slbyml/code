@@ -4,7 +4,7 @@ const def = {
 }
 
 class Router {
-  constructor(arg = def) {
+  constructor(arg = def){
     this.mode = arg.mode
     this.routers = arg.routers
     this.content = document.getElementById("wrap")

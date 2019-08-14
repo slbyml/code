@@ -1,4 +1,4 @@
- class promise{
+class promise{
   constructor(executor) {
     this.status = "pending"  // 当前的状态
     this.value = undefined    // 成功时传给下一步的值
@@ -55,7 +55,7 @@
 
 
 //  testinggggggggggggggg
-const test = new promise((resolve, reject) => {
+const test = new promise(() => {
   console.log('start');
   throw new Error("错误错误错误错误")
   // setTimeout(() => {

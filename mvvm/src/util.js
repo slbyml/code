@@ -17,15 +17,15 @@ export default {
   },
   // 设置数据
   setVMVal(vm, exp, newVal) {
-    const val = vm;
+    let val = vm;
     exp = exp.split('.');
     exp.forEach((k, i) => {
-        // 非最后一个key，更新val的值
-        if (i < exp.length - 1) {
-            val = val[k];
-        } else {
-            val[k] = newVal;
-        }
+      // 非最后一个key，更新val的值
+      if (i < exp.length - 1) {
+        val = val[k];
+      } else {
+        val[k] = newVal;
+      }
     });
   }
 }
