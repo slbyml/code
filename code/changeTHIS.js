@@ -1,3 +1,4 @@
+/* eslint-disable */
 // 更改this指向模拟实现
 
 // call的模拟

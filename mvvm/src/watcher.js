@@ -1,5 +1,5 @@
-import Dep from "./dep"
-import util from "./util"
+import Dep from './dep'
+import util from './util'
 /**
  * watch方法
  * 链接模板和数据
@@ -8,21 +8,23 @@ import util from "./util"
  * @param {*} exp 通过正则在dom中匹配到的key
  * @param {*} cb 数据更改后的回调函数，回调函数是用来更新dom
  */
-export default class watcher{
-  constructor(vm, exp, cb) {
+export default class watcher {
+  constructor (vm, exp, cb) {
     this.vm = vm
     this.exp = exp
     this.cb = cb
-    Dep.target = this     // 1、防止dom中同一位置的数据多次订阅，2、方便订阅是拿到此watcher
+    Dep.target = this // 1、防止dom中同一位置的数据多次订阅，2、方便订阅是拿到此watcher
     this.getVal()
     Dep.target = null
   }
-  update() {
+
+  update () {
     const val = this.getVal()
-    this.cb(val)      // 当有数据更新是，通知模板编译（compile.js）那边更新页面
+    this.cb(val) // 当有数据更新是，通知模板编译（compile.js）那边更新页面
   }
+
   // 获取key对应的val,此时会触发getter,会将当前的dom对应的watcher放在对应的key所在的发布订阅模式中
-  getVal() {
+  getVal () {
     return util.getVMVal(this.vm, this.exp)
   }
 }

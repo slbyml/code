@@ -1,16 +1,18 @@
 /**
  * 发布订阅模式
  */
-export default class Dep{
-  constructor() {
+export default class Dep {
+  constructor () {
     this.subs = []
   }
+
   // 订阅
-  addSub(sub) {
+  addSub (sub) {
     this.subs.push(sub)
   }
+
   // 通知所有订阅者更新
-  notify() {
+  notify () {
     this.subs.forEach(sub => {
       sub.update()
     })

@@ -1,18 +1,17 @@
 module.exports = function (entryId, modules) {
   const moduleFn = modules => {
     let str = ''
-    for (let key in modules) {
+    for (const key in modules) {
       str += `"${key}": (function (module, __webpack_exports__, __webpack_require__) {
 
 				"use strict";
-				eval(\``+`${modules[key]}`+`\`);
+				eval(\`` + `${modules[key]}` + `\`);
       }),
       `
-      
     }
     return str
   }
-  
+
   return `(function (modules) { // webpackBootstrap
     var installedModules = {};
   

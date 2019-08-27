@@ -1,5 +1,5 @@
-import {createElement} from "./create-element"
-import {update} from "./update"
+import { createElement } from './create-element'
+import { update } from './update'
 // const tree = createElement('div', { id: 'virtual-container' }, [
 //   createElement('h1', {}, ['h1标签']),
 //   createElement('h2', {}, ['h2标签']),
@@ -22,30 +22,30 @@ const el = document.getElementById('app')
 //   createElement("p", {class: "demo", style: {fontSize: "12px"}}, ['testingingigngn']),
 //   createElement("span", {class: "demo"}, ['111111'])
 // ])
-const vnode = createElement('div', { attrs:{id: 'app'} }, [
-  createElement('p', {style: {color: "red"}}, ['p标签']),
-  createElement('ul', {class: "box"}, [
-    createElement('li', { key: '1', class: 'item'}, ['li标签1']),
-    createElement('li', { key: '2', class: 'item'}, ['li标签2']),
-    createElement('li', { key: '3', class: 'item'}, ['li标签3']),
-    createElement('li', { key: '4', class: 'item'}, ['li标签4']),
-    createElement('li', { key: '5', class: 'item'}, ['li标签5']),
-  ]),
-]);
-console.log(vnode);
+const vnode = createElement('div', { attrs: { id: 'app' } }, [
+  createElement('p', { style: { color: 'red' } }, ['p标签']),
+  createElement('ul', { class: 'box' }, [
+    createElement('li', { key: '1', class: 'item' }, ['li标签1']),
+    createElement('li', { key: '2', class: 'item' }, ['li标签2']),
+    createElement('li', { key: '3', class: 'item' }, ['li标签3']),
+    createElement('li', { key: '4', class: 'item' }, ['li标签4']),
+    createElement('li', { key: '5', class: 'item' }, ['li标签5'])
+  ])
+])
+console.log(vnode)
 
 update(el, vnode)
 
-document.querySelector(".test1").addEventListener("click",() => {
-  const vnode1 = createElement('div', { attrs:{id: 'app'} }, [
-    createElement('p', {style: {color: "#333"}}, ['p标签']),
-    createElement('ul', {class: "box"}, [
-      createElement('li', { key: '1', class: 'item'}, ['li标签1']),
-      createElement('li', { key: '2', class: 'item'}, ['li标签2']),
-      createElement('li', { key: '3', class: 'item'}, ['li标签3']),
-      createElement('li', { key: '4', class: 'item'}, ['li标签4']),
-      createElement('li', { key: '5', class: 'item'}, ['li标签5']),
-    ]),
+document.querySelector('.test1').addEventListener('click', () => {
+  const vnode1 = createElement('div', { attrs: { id: 'app' } }, [
+    createElement('p', { style: { color: '#333' } }, ['p标签']),
+    createElement('ul', { class: 'box' }, [
+      createElement('li', { key: '1', class: 'item' }, ['li标签1']),
+      createElement('li', { key: '2', class: 'item' }, ['li标签2']),
+      createElement('li', { key: '3', class: 'item' }, ['li标签3']),
+      createElement('li', { key: '4', class: 'item' }, ['li标签4']),
+      createElement('li', { key: '5', class: 'item' }, ['li标签5'])
+    ])
   ])
   update(el, vnode1, vnode)
 })
