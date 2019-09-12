@@ -2,5 +2,3 @@ https://github.com/muwoo/blogs/blob/master/src/Vue/11.md
 https://www.zhihu.com/question/61064119/answer/183717717
 https://github.com/answershuto/learnVue/blob/master/docs/VirtualDOM%E4%B8%8Ediff(Vue%E5%AE%9E%E7%8E%B0).MarkDown
 https://github.com/liutao/vue2.0-source/blob/master/patch%E2%80%94%E2%80%94diff.md
-https://www.jianshu.com/p/2de62f65c33a
-https://github.com/jkchao/blog/issues/5
