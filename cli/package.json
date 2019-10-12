@@ -1,0 +1,26 @@
+{
+  "name": "my-cli",
+  "version": "1.0.0",
+  "description": "cli",
+  "main": "index.js",
+  "bin": {
+    "my-cli": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "  ",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "commander": "^3.0.1",
+    "consolidate": "^0.15.1",
+    "download-git-repo": "^3.0.1",
+    "ejs": "^2.7.1",
+    "inquirer": "^7.0.0",
+    "metalsmith": "^2.3.0",
+    "ncp": "^2.0.0",
+    "ora": "^3.4.0"
+  }
+}
