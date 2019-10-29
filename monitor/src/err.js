@@ -53,11 +53,13 @@ let errorCatch = {
       errorInfo.type = 'onerror';
       cb(errorInfo);
       _originOnerror && _originOnerror.apply(window, arg);
+      return true
     };
 
     let _originOnunhandledrejection = window.onunhandledrejection;
     window.onunhandledrejection = (...arg) => {
       let e = arg[0];
+      e.preventDefault()
       let reason = e.reason;
       cb({
         type: e.type || 'unhandledrejection',

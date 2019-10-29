@@ -3,25 +3,39 @@ import resources from './resources'
 import xhrHook from './xhr'
 import errorCatch from './err'
 import behavior from './behavior';
+import send from './send'
 
-perf.init((pers) => {
-  console.log('上传数据',pers);
-})
+const sendUrl = '/log.gif'
 
-//TODO 此方法可扩展，可增加配置项过滤不需要上报的静态资源,比如上报的图片请求
-resources.init((lists) => {
-  console.log('资源监控',lists);
-})
+try {
+  perf.init((pers) => {
+    send(sendUrl, pers)
+    console.log('初始化数据',pers);
+  })
+  
+  new resources({
+    types: ['img'],
+    excludes: [new RegExp(sendUrl)]
+  }).init((lists) => {
+    send(sendUrl, lists)
+    console.log('资源监控：',lists);
+  })
 
-//TODO数据上报的请求不需要再次拦截
-xhrHook.init((xhrInfo) => {
-  console.log(xhrInfo);
-});
+  //TODO数据上报的请求不需要再次拦截
+  xhrHook.init((xhrInfo) => {
+    send(sendUrl, xhrInfo)
+    console.log('xhr:',xhrInfo);
+  });
 
-errorCatch.init((err) => {
-  console.log('errorCatch', err);
-});
+  errorCatch.init((err) => {
+    send(sendUrl, err)
+    console.log('错误上报：', err);
+  });
 
-behavior.init(() => {
-  console.log('behavior init');
-});
+  new behavior().init((path) => {
+    send(sendUrl, path)
+    console.log(`event path:`,path);
+  });
+} catch (err) {
+  console.log(err);
+}

@@ -52,7 +52,7 @@ let xhrHook = {
           _self.xhr_info.responseSize = responseSize; // 相应大小
           _self.xhr_info.requestSize = value ? value.length : 0;
           _self.xhr_info.type = 'xhr';
-          cb(this.xhr_info);
+          cb(_self.xhr_info);
         }
       };
 

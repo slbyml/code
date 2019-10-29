@@ -1,9 +1,10 @@
+import { eventMethod, getClass, extend } from "./util"
 /**
- * 
  * 点击上报路径
  */
-let getXpath = (element) => {
+let getpath = (element, config) => {
   if (!(element instanceof Element)) {
+    console.warn("不是一个标准的html标签");
     return void 0;
   }
 
@@ -11,43 +12,78 @@ let getXpath = (element) => {
     return void 0;
   }
 
-  let rootElement = document.body;
-  if (element === rootElement) {
-    return void 0;
-  }
-
-
   let childIndex = (ele) => {
     let parent = ele.parentNode;
     let children = Array.from(parent.childNodes).filter(_ => _.nodeType === 1);
-    let i = 0;
-    for (let _i = 0, len = children.length; _i < len; _i++) {
-      if (children[_i] === ele) {
-        i = _i;
+    let index = 0;
+    for (let i = 0; i < children.length; i++) {
+      if (children[i] === ele) {
+        index = i;
         break;
       }
     }
-    return i === 0 ? '' : '[' + i + ']';
+    return index === 0 ? '' : `:nth-child(${index + 1})`;
   };
 
-  let xpath = '';
+  let _path = '';
 
-  while (element !== document) {
-    let tag = element.tagName.toLocaleLowerCase();
-    let eleIndex = childIndex(element);
-    xpath = '/' + tag + eleIndex + xpath;
+  while (element !== document && element !== document.documentElement && element !== document.body) {
+    const tag = element.tagName.toLocaleLowerCase();
+    // 如果遇到有id的标签则直接返回
+    if (element.id) {
+      _path = `#${element.id}${_path}`
+      break
+    }
+
+    // 获取标签在同级标签的位置：nth-child
+    const eleIndex = childIndex(element);
+    
+    // 获取类名
+    let _class = ''
+    if (config.useClass) {
+      _class = getClass(element)
+    }
+
+    _path = '>' + tag + eleIndex + _class + _path;
+
+    // 一旦能够精确找到dom则立即返回，不在向parent遍历
+    if(document.querySelector && document.querySelectorAll(_path.substr(1)).length <= 1){
+      break
+    }
     element = element.parentNode;
   }
-
-  return xpath;
+  // 需要去掉开头的”>“符号
+  return _path === '' ? '' : _path.substr(1)
 };
 
-export default {
-  init: (cb) => {
-    cb();
-    document.addEventListener('click', (e) => {
-      let xpath = getXpath(e.target);
-      console.log('xpath: ', xpath);
+// 默认参数
+const defaultOptions = {
+  useClass: true, //是否显示class
+  events: 'click', // 监听事件
+  attr: '' // 当有attr参数的时候，则默认只手机带有此参数的事件
+}
+
+export default class behavior {
+  constructor(config) {
+    this.config = extend({}, defaultOptions, config)
+  }
+  init(cb){
+    document.body[eventMethod.method](eventMethod.prefix + this.config.events, (event) => {
+      const _event = event || window.event
+      const _target = _event.target || _event.srcElement
+      
+      // 只对有特殊标记的标签埋点
+      if(this.config.attr !== ''){
+        const _attr = _target.getAttribute(this.config.attr)
+        if(_attr !== '' && _attr !== true)  return false
+      }
+
+      let _path = getpath(_target, this.config);
+      if(!_path) return;
+      cb({
+        path: _path,
+        event: 'click'
+      });
     }, false);
   }
 }

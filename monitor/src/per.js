@@ -33,18 +33,18 @@ export default {
         // 关键阶段，包括DNS查询及重定向时间
         load: filterTime(timing.loadEventEnd, timing.navigationStart), // 从开始到页面完全加载总时间
         domReady: filterTime(timing.domContentLoadedEventStart, timing.navigationStart), // 从开始到domready时间
-        interactive: filterTime(timing.domInteractive, timing.navigationStart), // 从开始到可操作时间
+        interactive: filterTime(timing.domInteractive, timing.navigationStart), // 从开始到可操作时间;白屏时间
         ttfb: filterTime(timing.responseStart, timing.navigationStart),  // 从开始到首字节时间
       };
 
       return perfData;
     };
 
-    Util.domready(() => {
-      let perfData = reportPerf('domready');
-      perfData.type = 'domready';
-      cb(perfData);
-    });
+    // Util.domready(() => {
+    //   let perfData = reportPerf('domready');
+    //   perfData.type = 'domready';
+    //   cb(perfData);
+    // });
 
     Util.onload(() => {
       let perfData = reportPerf('onload');

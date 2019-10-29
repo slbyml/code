@@ -1,7 +1,7 @@
 /**
  * 页面资源监控
  */
-import { onload, filterTime, performance } from './util';
+import { onload, filterTime, performance, extend } from './util';
 
 
 
@@ -25,20 +25,47 @@ let resolvePerformanceTiming = (timing) => {
   return o;
 };
 
-let resolveEntries = (entries) => entries.map(item => resolvePerformanceTiming(item));
+// 过滤静态资源
+let filterResources = (entries, config) => {
+  const types = config.types
+  const includes = config.includes
+  const excludes = config.excludes
+  const len = Math.max(types && types.length, includes && includes.length, excludes && excludes.length, 0)
+  if (len === 0) return entries
+  return entries.filter(item => {
+    for (let i = 0; i < len; i++) {
+      let flag = true
+      if(flag && types && types[i] !== item.initiatorType) flag = false;
+      if(flag && includes && !includes[i].test(item.name)) flag = false;
+      if(flag && excludes && excludes[i].test(item.name)) flag = false;
+      
+      if(flag) return true 
+      if (i === len - 1) return false
+    }
+  })
+}
 
-let resources = {
-  init: (cb) => {
+const defaultOptions = {
+  types: null, //统计静态资源类型
+  includes: null, // 统计的资源需要包含的链接
+  excludes: null // 统计的资源需要排除的链接
+}
+
+class resources{
+  constructor(config){
+    this.config = extend({}, defaultOptions, config)
+  }
+  init(cb) {
     if (!performance || !performance.getEntries) {
       return void 0;
     }
 
-    if (window.PerformanceObserver) {
+    if (!window.PerformanceObserver) {
       // 此方法存在问题，独有放在此脚步之前的资源，没法监控到
       let observer = new window.PerformanceObserver((list) => {
         try {
           let entries = list.getEntries();
-          cb(resolveEntries(entries));
+          this.callback(entries, cb)
         } catch (e) {
           console.error('PerformanceObserver', e);
         }
@@ -49,10 +76,19 @@ let resources = {
     } else {
       onload(() => {
         let entries = performance.getEntriesByType('resource');
-        cb(resolveEntries(entries));
+        this.callback(entries, cb)
       });
     }
-  },
-};
+  }
+  resolveEntries(entries) {
+    return filterResources(entries, this.config).map(item => resolvePerformanceTiming(item));
+  }
+  callback(entries, cb) {
+    const lists = this.resolveEntries(entries)
+    if (lists && lists.length) {
+      cb(lists)
+    }
+  }
+}
 
 export default resources;
