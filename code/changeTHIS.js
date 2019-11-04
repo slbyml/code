@@ -32,5 +32,11 @@ Function.prototype.bind2 = () => {
 }
 
 Function.prototype.bind22 = function(ctx, ...arg1) {
-  return (...arg2) => this.call(ctx, ...arg1, ...arg2)
+  let res =  (...arg2) => this.call(ctx, ...arg1, ...arg2)
+  let fn = function() {}
+  if (this.prototype) {
+    fn.prototype = this.prototype
+  }
+  res.prototype= new fn()
+  return res
 }
