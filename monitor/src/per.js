@@ -1,7 +1,7 @@
 /**
  * 页面加载监控
  */
-import { Util, filterTime, performance } from './util.js'
+import { Util, filterTime, performance, getExplore } from './util.js'
 
 export default {
   init(cb) {
@@ -35,6 +35,12 @@ export default {
         domReady: filterTime(timing.domContentLoadedEventStart, timing.navigationStart), // 从开始到domready时间
         interactive: filterTime(timing.domInteractive, timing.navigationStart), // 从开始到可操作时间;白屏时间
         ttfb: filterTime(timing.responseStart, timing.navigationStart),  // 从开始到首字节时间
+
+        // 浏览器相关
+        referrer: document.referrer || "",
+        ds: `${window.innerWidth}*${window.innerHeight}`,
+        ln: navigator.language || navigator.userLanguage,
+        ng: getExplore()
       };
 
       return perfData;
