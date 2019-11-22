@@ -28,7 +28,7 @@ let getpath = (element, config) => {
   let _path = '';
 
   while (element !== document && element !== document.documentElement && element !== document.body) {
-    const tag = element.tagName.toLocaleLowerCase();
+    const tag = element.tagName.toLowerCase();
     // 如果遇到有id的标签则直接返回
     if (element.id) {
       _path = `#${element.id}${_path}`
