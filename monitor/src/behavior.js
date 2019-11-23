@@ -77,6 +77,9 @@ export default class behavior {
         const _attr = _target.getAttribute(this.config.attr)
         if(_attr !== '' && _attr !== true)  return false
       }
+      
+      //TODO 待完善：对有特殊标记的标签增加自定义参数
+      //例：<div v-monitor="{data: 123}"></div>
 
       let _path = getpath(_target, this.config);
       if(!_path) return;
