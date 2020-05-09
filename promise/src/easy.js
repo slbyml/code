@@ -1,4 +1,4 @@
-class PromiseA {
+export class PromiseA {
   constructor (init) {
     this.PromiseStatus = 'pending'
     var resolve = (val) => {
@@ -9,7 +9,7 @@ class PromiseA {
     }
     if (init) {
       setTimeout(() => { // 为了支持同步任务
-        init(resolve, reject)
+        init(resolve)
       })
     }
   }

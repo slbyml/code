@@ -53,13 +53,13 @@ let errorCatch = {
       errorInfo.type = 'onerror';
       cb(errorInfo);
       _originOnerror && _originOnerror.apply(window, arg);
-      return true
+      return true // 可以防止错误输出到控制台
     };
 
     let _originOnunhandledrejection = window.onunhandledrejection;
     window.onunhandledrejection = (...arg) => {
       let e = arg[0];
-      e.preventDefault()
+      e.preventDefault()  // 去掉控制台的异常
       let reason = e.reason;
       cb({
         type: e.type || 'unhandledrejection',
