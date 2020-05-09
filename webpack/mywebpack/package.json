@@ -12,14 +12,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/generator": "^7.3.3",
-    "@babel/parser": "^7.4.2",
-    "@babel/traverse": "^7.2.3",
-    "@babel/types": "^7.3.3",
+    "@babel/generator": "^7.9.6",
+    "@babel/parser": "^7.9.6",
+    "@babel/traverse": "^7.9.6",
+    "@babel/types": "^7.9.6",
     "babylon": "^6.18.0"
   },
   "dependencies": {
-    "less": "^3.9.0",
-    "tapable": "^1.1.1"
+    "less": "^3.11.1",
+    "tapable": "^1.1.3"
   }
 }

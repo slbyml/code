@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/slbyml/code#readme",
   "devDependencies": {
-    "commitizen": "^4.0.3",
-    "cz-conventional-changelog": "^3.0.2",
-    "eslint": "^6.1.0"
+    "commitizen": "^4.1.2",
+    "cz-conventional-changelog": "^3.2.0",
+    "eslint": "^6.8.0"
   },
   "config": {
     "commitizen": {
