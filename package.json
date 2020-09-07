@@ -26,5 +26,8 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "conventional-changelog": "^3.1.23",
+    "conventional-changelog-cli": "^2.1.0"
+  }
 }

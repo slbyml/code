@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>download</title>
+</head>
+<body>
+  <button onclick="downLoad()">下载</button>
+</body>
+<script>
+  function downLoad() {
+    const text = {value: '下载'}
+    const str = JSON.stringify(text)
+    const blob = new Blob([str], {type: 'application/json'})
+
+    const a = document.createElement('a')
+    a.download = 'down.json'
+    a.rel = 'noopener'  // 禁止打开链接
+    a.href = window.URL.createObjectURL(blob)
+    a.dispatchEvent(new MouseEvent('click'))
+    
+    window.URL.revokeObjectURL(blob)
+  }
+</script>
+</html>

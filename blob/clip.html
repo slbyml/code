@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>裁剪</title>
+  <style>
+    *{padding: 0;margin: 0;}
+    .show{
+      display: inline-block!important;
+    }
+
+    .look{
+      display: none;
+      border: 1px solid #ccc;
+    }
+    .look img{
+      max-width: 500px;
+      max-height: 500px;
+    }
+
+    .main{
+      display: none;
+    }
+    .clip{
+      border: 2px dashed #ccc;
+      position: relative;
+      display: inline-block;
+    }
+    .clip-box{
+      width: 100px;
+      height: 100px;
+      background-color: yellow;
+      opacity: .3;
+      position: absolute;
+      left: 150px;
+      top: 150px;
+    }
+
+    .clip-result{
+      display: none;
+    }
+    .result {
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <input type="file" name="" id="file" accept="image/*">
+  </div>
+
+  <div class="look">
+    <img src="" alt="预览">
+  </div>
+
+  <div class="main">
+    <div class="clip">
+      <canvas width="400px" height="400px" id="selectImg"></canvas>
+      <div class="clip-box"></div>
+    </div>
+    <div class="btn-group">
+      <button class="bigger">放大</button>
+      <button class="smaller">缩小</button>
+      <button class="sure">剪切</button>
+    </div>
+  </div>
+  <div class="clip-result">
+    <p>裁剪结果</p>
+    <div class="result">
+      <img src="" alt="裁剪结果">
+    </div>
+  </div>
+</body>
+</html>
