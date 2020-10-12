@@ -3,7 +3,6 @@
  */
 
 import {getTimestamp} from './util'
-import {filterXhrUrl} from './config'
 
 let xhrHook = {
   init: (cb) => {
@@ -15,6 +14,7 @@ let xhrHook = {
   },
   
   initXHR(cb) {
+    const filterXhrUrl = window.__monitor__.config.filterXhrUrl || []
     let xhr = window.XMLHttpRequest;
     // 防止多次修改
     if (xhr._eagle_flag === true) {
