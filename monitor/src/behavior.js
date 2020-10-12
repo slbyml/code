@@ -1,4 +1,4 @@
-import { eventMethod, getClass, extend } from "./util"
+import { eventMethod, getClass, extend, getTimestamp } from "./util"
 /**
  * 点击上报路径
  */
@@ -84,6 +84,7 @@ export default class behavior {
       let _path = getpath(_target, this.config);
       if(!_path) return;
       cb({
+        sTime: getTimestamp(),
         path: _path,
         event: 'click'
       });

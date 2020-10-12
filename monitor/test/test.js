@@ -1,4 +1,4 @@
 setTimeout(() => {
   aa()
 })
-Promise.reject('promise error');
+// Promise.reject('promise error');

@@ -1,12 +1,13 @@
 /**
  * 页面资源监控
  */
-import { onload, filterTime, performance, extend } from './util';
+import { onload, filterTime, performance, extend, getTimestamp } from './util';
 
 
 
 let resolvePerformanceTiming = (timing) => {
   let o = {
+    type: 'resources',
     initiatorType: timing.initiatorType, //资源类型
     name: timing.name,  // 资源路径
     duration: parseInt(timing.duration),
@@ -20,6 +21,8 @@ let resolvePerformanceTiming = (timing) => {
     request: filterTime(timing.responseEnd, timing.requestStart), // 总时间
 
     ttfb: filterTime(timing.responseStart, timing.requestStart), // 首字节时间
+
+    sTime: getTimestamp(),
   };
 
   return o;

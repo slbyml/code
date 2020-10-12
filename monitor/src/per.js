@@ -1,7 +1,7 @@
 /**
  * 页面加载监控
  */
-import { Util, filterTime, performance, getExplore } from './util.js'
+import { Util, filterTime, performance, getExplore, getTimestamp } from './util.js'
 
 export default {
   init(cb) {
@@ -38,9 +38,10 @@ export default {
 
         // 浏览器相关
         referrer: document.referrer || "",
-        ds: `${window.innerWidth}*${window.innerHeight}`,
+        client: `${window.innerWidth}*${window.innerHeight}`,
         ln: navigator.language || navigator.userLanguage,
-        ng: getExplore()
+        ng: getExplore(),
+        sTime: getTimestamp(),
       };
 
       return perfData;

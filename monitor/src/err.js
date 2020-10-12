@@ -2,6 +2,8 @@
  * 
  * 错误收集
  */
+import { getTimestamp } from "./util"
+
 let formatError = (errObj) => {
   let col = errObj.column || errObj.columnNumber; // Safari Firefox
   let row = errObj.line || errObj.lineNumber; // Safari Firefox
@@ -51,6 +53,7 @@ let errorCatch = {
       errorInfo._lineNumber = lineNumber;
       errorInfo._columnNumber = columnNumber;
       errorInfo.type = 'onerror';
+      errorInfo.sTime= getTimestamp(),
       cb(errorInfo);
       _originOnerror && _originOnerror.apply(window, arg);
       return true // 可以防止错误输出到控制台
@@ -63,6 +66,7 @@ let errorCatch = {
       let reason = e.reason;
       cb({
         type: e.type || 'unhandledrejection',
+        sTime: getTimestamp(),
         reason
       });
       _originOnunhandledrejection && _originOnunhandledrejection.apply(window, arg);

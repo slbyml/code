@@ -63,7 +63,13 @@ export const Util = {
   }
 }
 
+// 空函数
 export const noop = () => {};
+
+//获取当前的时间戳
+export function getTimestamp() {
+  return Date.now()
+}
 
 export const onload = (cb) => {
   if (document.readyState === 'complete') {
