@@ -1,7 +1,7 @@
 /**
  * 页面资源监控
  */
-import { onload, filterTime, performance, extend, getTimestamp } from './util';
+import { onload, filterTime, performance, extend, getTimestamp, getLocationHref } from './util';
 
 
 
@@ -23,6 +23,7 @@ let resolvePerformanceTiming = (timing) => {
     ttfb: filterTime(timing.responseStart, timing.requestStart), // 首字节时间
 
     sTime: getTimestamp(),
+    pageUrl: getLocationHref()
   };
 
   return o;

@@ -2,7 +2,7 @@
  * 
  * 错误收集
  */
-import { getTimestamp, formatError } from "./util"
+import { getTimestamp, formatError, getLocationHref } from "./util"
 
 let errorCatch = {
   init: (cb) => {
@@ -14,6 +14,7 @@ let errorCatch = {
       errorInfo._scriptURI = scriptURI;
       errorInfo._lineNumber = lineNumber;
       errorInfo._columnNumber = columnNumber;
+      errorInfo.pageUrl = getLocationHref()
       errorInfo.type = 'onerror';
       errorInfo.sTime= getTimestamp(),
       cb(errorInfo);

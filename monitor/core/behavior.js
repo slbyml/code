@@ -1,4 +1,4 @@
-import { eventMethod, getClass, extend, getTimestamp } from "./util"
+import { eventMethod, getClass, extend, getTimestamp, getLocationHref } from "./util"
 /**
  * 点击上报路径
  */
@@ -86,6 +86,7 @@ export default class behavior {
       cb({
         sTime: getTimestamp(),
         path: _path,
+        pageUrl: getLocationHref(),
         event: 'click'
       });
     }, false);

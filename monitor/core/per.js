@@ -1,7 +1,7 @@
 /**
  * 页面加载监控
  */
-import { Util, filterTime, performance, getExplore, getTimestamp } from './util.js'
+import { Util, filterTime, performance, getExplore, getTimestamp, getLocationHref } from './util.js'
 
 export default {
   init(cb) {
@@ -42,6 +42,7 @@ export default {
         ln: navigator.language || navigator.userLanguage,
         ng: getExplore(),
         sTime: getTimestamp(),
+        pageUrl: getLocationHref()
       };
 
       return perfData;

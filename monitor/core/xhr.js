@@ -2,7 +2,7 @@
  * ajax 
  */
 
-import {getTimestamp} from './util'
+import {getTimestamp,getLocationHref} from './util'
 
 let xhrHook = {
   init: (cb) => {
@@ -26,6 +26,7 @@ let xhrHook = {
     xhr.prototype.open = function (method, url) {
       this.xhr_info = {
         url: url,
+        pageUrl: getLocationHref(),
         method: method,
         sTime: getTimestamp(),
         status: null
@@ -120,6 +121,7 @@ let xhrHook = {
       let fetchData = {
         method: method,
         url: url,
+        pageUrl: getLocationHref(),
         sTime: getTimestamp(),
         status: null,
       };
