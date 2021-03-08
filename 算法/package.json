@@ -2,5 +2,8 @@
   "name": "a",
   "type":"module",
   "description": "",
-  "main": "index.js"
+  "main": "index.js",
+  "engines": {
+    "node": ">=13.0.0"
+  }
 }
