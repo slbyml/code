@@ -101,7 +101,7 @@ export default class BinaryTree{
   }
 
   // 返回高度
-  height(root = this.root){  
+  height(root = this.root){
     var tree_height = function(node){
       // 左子树的高度和右子树的高度取最大值,加上当前的高度
       if(!node){
