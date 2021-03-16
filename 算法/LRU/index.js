@@ -6,7 +6,7 @@ var LRUCache = function(capacity) {
 
 LRUCache.prototype.get = function(key) {
   if (this.cache.has(key)) {
-    // 存在即更新
+    // 更新已经存在的值
     let temp = this.cache.get(key)
     this.cache.delete(key)
     this.cache.set(key, temp)
@@ -17,10 +17,9 @@ LRUCache.prototype.get = function(key) {
 
 LRUCache.prototype.put = function(key, value) {
   if (this.cache.has(key)) {
-    // 存在即更新（删除后加入）
+    // 更新已经存在的值
     this.cache.delete(key)
   } else if (this.cache.size >= this.capacity) {
-    // 不存在即加入
     // 缓存超过最大值，则移除最近没有使用的
     console.log(this.cache.keys()[0]);
     this.cache.delete(this.cache.keys().next().value)
