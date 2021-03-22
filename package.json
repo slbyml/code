@@ -17,17 +17,25 @@
   },
   "homepage": "https://github.com/slbyml/code#readme",
   "devDependencies": {
-    "commitizen": "^4.1.2",
-    "cz-conventional-changelog": "^3.2.0",
-    "eslint": "^6.8.0"
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
+    "commitizen": "^4.2.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^6.8.0",
+    "husky": "^5.2.0",
+    "lint-staged": "^10.5.4"
+  },
+  "lint-staged": {
+    "*.{js,vue}": "eslint"
   },
   "config": {
     "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
+      "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "dependencies": {
-    "conventional-changelog": "^3.1.23",
-    "conventional-changelog-cli": "^2.1.0"
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
