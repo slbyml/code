@@ -40,5 +40,4 @@ Compile：
 
 
 ### computed原理
-[分析1](https://segmentfault.com/a/1190000011912328)
-[分析2](https://segmentfault.com/a/1190000010408657#articleHeader0)
+[分析1](https://segmentfault.com/a/1190000016368913?utm_source=sf-similar-article)
