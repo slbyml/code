@@ -1,4 +1,3 @@
-[PPT](https://ppt.baomitu.com/d/4a2b4921)
 当有数据被改动时会触发`observe`中数据的`setter`，此时会调用`dep.notify`方法给所有订阅的`watcher`发通知进行视图更新，此时会进行diff流程
 ## vue中vdom-diff解析
 > vdom源码分析，删除大部分影响分析diff的代码，并为主要代码书写注释，方便查看
