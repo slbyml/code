@@ -1,4 +1,6 @@
+import { createWorkInProgess } from './reactFiber'
 import { HostRoot } from './ReactWorkTags'
+import { beginWork } from './ReactFiberBeginWork'
 // 正在更新的根
 let workInProgressRoot = null
 // 正在更新的fiber
@@ -6,7 +8,7 @@ let workInProgress = null
 /**
  * 调度更新fiber
  */
-export function scheduleUpdateOnFiber(fiber) {
+export function  scheduleUpdateOnFiber(fiber) {
   const fiberRoot = markUpdateLaneFromFiberToRoot(fiber)
   performSyncWorkOnRoot(fiberRoot)
 }
@@ -20,7 +22,7 @@ function markUpdateLaneFromFiberToRoot(sourceFiber){
   let parent = sourceFiber.return;
   while (parent) {
     node = parent;
-    parent = parent.parent;
+    parent = parent.return;
   }
 
   if (node.tag === HostRoot) {
@@ -38,4 +40,30 @@ function performSyncWorkOnRoot(fiberRoot) {
   workInProgressRoot = fiberRoot
   workInProgress = createWorkInProgess(workInProgressRoot.current)
   console.log(workInProgress);
+  workLoopSync()
+}
+/**
+ * 开始自上而下的创建fiber
+ */
+function workLoopSync() {
+  while (workInProgress !== null) {
+    performUnitOfWork(workInProgress);
+  }
+}
+
+/**
+ * 开始执行每个单元
+ */
+function performUnitOfWork(unitOfWork) {
+  // 正在处理的fiber替身
+  const current = unitOfWork.alternate;
+  // 处理当前fiber的子fiber链表
+  // 返回下一个要处理的fiber，一般为unitOfWork的第一个子fiber
+  let next = beginWork(current, unitOfWork);
+  if (next === null) {
+    // completeUnitOfWork(unitOfWork);
+  } else {
+    workInProgress = next;
+  }
+
 }
