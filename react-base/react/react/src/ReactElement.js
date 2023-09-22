@@ -41,14 +41,6 @@ function hasValidRef(config) {
 }
 
 function hasValidKey(config) {
-  if (__DEV__) {
-    if (hasOwnProperty.call(config, 'key')) {
-      const getter = Object.getOwnPropertyDescriptor(config, 'key').get;
-      if (getter && getter.isReactWarning) {
-        return false;
-      }
-    }
-  }
   return config.key !== undefined;
 }
 
@@ -374,14 +366,8 @@ export function createElement(type, config, children) {
     if (hasValidRef(config)) {
       ref = config.ref;
 
-      if (__DEV__) {
-        warnIfStringRefCannotBeAutoConverted(config);
-      }
     }
     if (hasValidKey(config)) {
-      if (__DEV__) {
-        checkKeyStringCoercion(config.key);
-      }
       key = '' + config.key;
     }
 
@@ -408,11 +394,6 @@ export function createElement(type, config, children) {
     for (let i = 0; i < childrenLength; i++) {
       childArray[i] = arguments[i + 2];
     }
-    if (__DEV__) {
-      if (Object.freeze) {
-        Object.freeze(childArray);
-      }
-    }
     props.children = childArray;
   }
 
@@ -422,20 +403,6 @@ export function createElement(type, config, children) {
     for (propName in defaultProps) {
       if (props[propName] === undefined) {
         props[propName] = defaultProps[propName];
-      }
-    }
-  }
-  if (__DEV__) {
-    if (key || ref) {
-      const displayName =
-        typeof type === 'function'
-          ? type.displayName || type.name || 'Unknown'
-          : type;
-      if (key) {
-        defineKeyPropWarningGetter(props, displayName);
-      }
-      if (ref) {
-        defineRefPropWarningGetter(props, displayName);
       }
     }
   }

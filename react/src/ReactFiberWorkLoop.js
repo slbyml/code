@@ -60,6 +60,8 @@ function performUnitOfWork(unitOfWork) {
   // 处理当前fiber的子fiber链表
   // 返回下一个要处理的fiber，一般为unitOfWork的第一个子fiber
   let next = beginWork(current, unitOfWork);
+  // 将新熟悉同步到老属性上
+  unitOfWork.memoizedProps = unitOfWork.pendingProps
   if (next === null) {
     // completeUnitOfWork(unitOfWork);
   } else {
