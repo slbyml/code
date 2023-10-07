@@ -33,7 +33,7 @@ function  updateHostRoot(current, workInProgress) {
 function  updateHostComponent(current, workInProgress) {
   const type = workInProgress.type
   const nextProps = workInProgress.pendingProps
-  let nextChildren = workInProgress.children
+  let nextChildren = nextProps.children
   // 如果子元素是文本，则优化下，
   const isDirectTextChild = shouldSetTextContent(type, nextProps)
   if (isDirectTextChild) {

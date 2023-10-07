@@ -7,7 +7,6 @@ export function creatFiberRoot (containerInfo) {
 
   fiberRoot.current = hostRootFiber
   hostRootFiber.stateNode = fiberRoot
-
   initializeUpdateQueue(hostRootFiber)
   return fiberRoot
 }

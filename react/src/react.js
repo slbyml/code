@@ -36,7 +36,7 @@ function createElement(type, config, children) {
     props.children = children
   } else if(childrenLength > 1){
     const childArray = new Array(childrenLength)
-    for (let i = 0; i < childArray; i++) {
+    for (let i = 0; i < childrenLength; i++) {
       childArray[i] = arguments[i+2]
     }
     props.children = childArray

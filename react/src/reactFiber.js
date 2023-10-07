@@ -8,34 +8,34 @@ export function createHostRootFiber () {
 /**
  * 创建fiber根节点
  * @param {*} tag fiber的标签
- * @param {*} pendigProps 等待生效的属性对象
+ * @param {*} pendingProps 等待生效的属性对象
  * @param {*} key
  */
-function  createFiber (tag, pendigProps, key ) {
-  return new FiberNode(tag, pendigProps, key )
+function  createFiber (tag, pendingProps, key ) {
+  return new FiberNode(tag, pendingProps, key )
 }
 
-function FiberNode(tag, pendigProps, key) {
+function FiberNode(tag, pendingProps, key) {
   this.tag = tag
-  this.pendigProps = pendigProps
+  this.pendingProps = pendingProps
   this.key = key
 }
 
 /**
  * 根据老fiber创建新fiber
  * @param {*} current
- * @param {*} pendigProps
+ * @param {*} pendingProps
  */
-export function createWorkInProgess (current, pendigProps) {
+export function createWorkInProgess (current, pendingProps) {
   let workInProgress = current.alternate
   if (!workInProgress) {
-    workInProgress = createFiber(current.tag, pendigProps, current.key)
+    workInProgress = createFiber(current.tag, pendingProps, current.key)
     workInProgress.type = current.type
     workInProgress.stateNode = current.stateNode
     workInProgress.alternate = current
     current.alternate = workInProgress
   } else {
-    workInProgress.pendigProps = pendigProps
+    workInProgress.pendingProps = pendingProps
   }
   workInProgress.flags = NoFlags
   workInProgress.child = null
