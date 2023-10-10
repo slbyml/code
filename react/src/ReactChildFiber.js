@@ -40,15 +40,51 @@ function childReconciler(shouldTrackSideEffects) {
     created.return = returnFiber
     return created
   }
+
+  function updateElement(returnFiber, oldFiber, newChild) {
+    if (oldFiber) {
+      if(oldFiber.type === newChild.type) {
+        const existing = useFiber(oldFiber, newChild.props)
+        existing.return = returnFiber
+        return existing
+      }
+    }
+    const created = createFiberFromFragment(newChild)
+    created.return = returnFiber
+    return created
+  }
+
+  function updateSlot(returnFiber, oldFiber, newChild) {
+    const key = oldFiber ? oldFiber.key : null
+    if (newChild.key === key) {
+      return updateElement(returnFiber, oldFiber, newChild)
+    } else {
+      return null
+    }
+  }
+  function palceChild(newFiber, newIdx) {
+    newFiber.index = newIdx
+    if (!shouldTrackSideEffects) {
+      return
+    }
+    const current = newFiber.alternate
+    if (current) {
+      // TODO
+    } else {
+      newFiber.flags = Placement
+    }
+  }
   // 多节点处理
   function reconcileChildrenArray(returnFiber, currentFirstChild, newChildren) {
     // 生成的第一个新fiber
     let resultingFirstChild = null
     // 存储上一个新处理的fiber
     let previousNewFiber = null
-    // 第一个老fiber
+    // 当前旧fiber
     let oldFiber = currentFirstChild
-    // let newIdx = 0
+    // 下一个旧fiber
+    let nextOldFiber = null
+    // 没有旧fiber
     if (!oldFiber) {
       for (let newIdx=0; newIdx < newChildren.length; newIdx++) {
         const newFiber = createChild(returnFiber, newChildren[newIdx])
@@ -60,6 +96,29 @@ function childReconciler(shouldTrackSideEffects) {
         previousNewFiber = newFiber
       }
       return resultingFirstChild
+    } else {
+      // 新旧fiber都存在
+      for (let newIdx = 0; newIdx < newChildren.length; newIdx++) {
+        nextOldFiber = oldFiber.sibling
+        // 尝试复用旧fiber
+        const newFiber = updateSlot(returnFiber, oldFiber, newChildren[newIdx])
+        if (!newFiber) {
+          break;
+        }
+        // 旧fiber存在但是新fiber并没有复用旧fiber
+        if (oldFiber && !newFiber.alternate) {
+          deleteChild(returnFiber, oldFiber)
+        }
+        // 给当前新fiber添加flags
+        palceChild(newFiber, newIdx)
+        if (!previousNewFiber) {
+          resultingFirstChild = newFiber
+        } else {
+          previousNewFiber.sibling = newFiber
+        }
+        previousNewFiber = newFiber
+        oldFiber = nextOldFiber
+      }
     }
     return resultingFirstChild
   }

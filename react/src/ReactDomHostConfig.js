@@ -17,6 +17,11 @@ export function appendChild(parentInstance, child) {
   parentInstance.appendChild(child)
 }
 
+export function insertBefore(parentInstance, child, before) {
+  parentInstance.insertBefore(child, before)
+
+}
+
 export function removeChild(parentInstance, child) {
   parentInstance.removeChild(child)
 }

@@ -7,7 +7,7 @@ let element1 = React.createElement(
     key: "element1",
     id: "element1"
   },
-  "element2"
+  "element1"
 );
 let element2 = React.createElement(
   "li",
@@ -49,12 +49,12 @@ document.getElementById('update').addEventListener('click', () => {
   //   '222'
   // );
   let element22 = React.createElement(
-    "li",
+    "p",
     {
       key: "element2",
-      id: "element22"
+      id: "element2"
     },
-    "element2"
+    "element22"
   );
   let test = React.createElement(
     "div",
@@ -62,7 +62,9 @@ document.getElementById('update').addEventListener('click', () => {
       key: "1",
       id: "aaa"
     },
-    element22
+    element1,
+    element22,
+    element3
   );
   ReactDOM.render(test, document.getElementById('root'))
 })
