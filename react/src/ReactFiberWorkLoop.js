@@ -2,7 +2,7 @@ import { createWorkInProgess } from './reactFiber'
 import { HostRoot } from './ReactWorkTags'
 import { beginWork } from './ReactFiberBeginWork'
 import { completeWork } from './ReactFiberCompleteWork'
-import { Deletion, Placement, Update } from './ReactFiberFlags'
+import { Deletion, Placement, Update, PlacemetAndUpdate } from './ReactFiberFlags'
 import { commitPlacement, commitWork, commitDeletion } from './ReactFiberCommitWork'
 // 正在更新的根
 let workInProgressRoot = null
@@ -50,6 +50,20 @@ function commitRoot() {
   workInProgressRoot.finishedWork = finishedWork
   commitMutationEffects(workInProgressRoot)
 }
+function getflag(flags) {
+  switch (flags) {
+  case Placement:
+    return '插入';
+  case Update:
+    return '更新';
+  case Deletion:
+    return '删除';
+  case PlacemetAndUpdate:
+    return '移动&更新';
+  default:
+    break;
+  }
+}
 function commitMutationEffects(root) {
   const finishedWork = root.finishedWork
   let nextEffect = finishedWork.firstEffect
@@ -59,12 +73,18 @@ function commitMutationEffects(root) {
     // 插入
     if (flags === Placement) {
       commitPlacement(nextEffect)
+    } else if (flags === PlacemetAndUpdate) {
+      // 0110
+      commitPlacement(nextEffect)
+      // 0100
+      nextEffect.flags = Update
+      commitWork(current, nextEffect)
     } else if (flags === Update) {
       commitWork(current, nextEffect)
     } else if(flags === Deletion) {
       commitDeletion(nextEffect)
     }
-    console.log(`flags:${nextEffect.flags}——type:#${nextEffect.type}——key:#${nextEffect.key}`);
+    console.log(`${getflag(nextEffect.flags)}—${nextEffect.type}—key:#${nextEffect.key}`);
     nextEffect = nextEffect.nextEffect
   }
   root.current = finishedWork

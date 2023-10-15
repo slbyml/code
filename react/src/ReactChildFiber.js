@@ -62,18 +62,32 @@ function childReconciler(shouldTrackSideEffects) {
       return null
     }
   }
-  function palceChild(newFiber, newIdx) {
+  function placeChild(newFiber, lastPlacedIndex, newIdx) {
     newFiber.index = newIdx
     if (!shouldTrackSideEffects) {
-      return
+      return lastPlacedIndex
     }
     const current = newFiber.alternate
     if (current) {
-      // TODO
+      const oldIndex = current.index
+      if (oldIndex < lastPlacedIndex) {
+        // 移动
+        newFiber.flags |= Placement
+        return lastPlacedIndex
+      } else {
+        return oldIndex
+      }
     } else {
       newFiber.flags = Placement
+      return lastPlacedIndex
     }
   }
+
+  function updateFromMap(existingChildren,returnFiber, newIdx, newChild) {
+    const matchedFiber = existingChildren.get((newChild.key === null || newChild.key === undefined) ? newIdx : newChild.key);
+    return updateElement(returnFiber, matchedFiber, newChild)
+  }
+
   // 多节点处理
   function reconcileChildrenArray(returnFiber, currentFirstChild, newChildren) {
     // 生成的第一个新fiber
@@ -84,10 +98,41 @@ function childReconciler(shouldTrackSideEffects) {
     let oldFiber = currentFirstChild
     // 下一个旧fiber
     let nextOldFiber = null
+    // 新节点的下标
+    let newIdx = 0
+    // 上一个可以复用不需要移动的旧节点
+    let lastPlacedIndex = 0
+    // 新旧fiber都存在
+    for (; oldFiber && newIdx < newChildren.length; newIdx++) {
+      nextOldFiber = oldFiber.sibling
+      // 尝试复用旧fiber
+      const newFiber = updateSlot(returnFiber, oldFiber, newChildren[newIdx])
+      if (!newFiber) {
+        break;
+      }
+      // 旧fiber存在但是新fiber并没有复用旧fiber
+      if (oldFiber && !newFiber.alternate) {
+        deleteChild(returnFiber, oldFiber)
+      }
+      // 给当前新fiber添加flags
+      lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIdx)
+      if (!previousNewFiber) {
+        resultingFirstChild = newFiber
+      } else {
+        previousNewFiber.sibling = newFiber
+      }
+      previousNewFiber = newFiber
+      oldFiber = nextOldFiber
+    }
+    if (newIdx === newChildren.length) {
+      deleteRemainingChildren(returnFiber, oldFiber)
+      return resultingFirstChild
+    }
     // 没有旧fiber
     if (!oldFiber) {
-      for (let newIdx=0; newIdx < newChildren.length; newIdx++) {
+      for (; newIdx < newChildren.length; newIdx++) {
         const newFiber = createChild(returnFiber, newChildren[newIdx])
+        lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIdx)
         if (!previousNewFiber) {
           resultingFirstChild = newFiber
         } else {
@@ -96,31 +141,43 @@ function childReconciler(shouldTrackSideEffects) {
         previousNewFiber = newFiber
       }
       return resultingFirstChild
-    } else {
-      // 新旧fiber都存在
-      for (let newIdx = 0; newIdx < newChildren.length; newIdx++) {
-        nextOldFiber = oldFiber.sibling
-        // 尝试复用旧fiber
-        const newFiber = updateSlot(returnFiber, oldFiber, newChildren[newIdx])
-        if (!newFiber) {
-          break;
+    }
+    // 剩下旧fiber放入map中
+    const existingChildren = mapRemainingChildren(returnFiber, oldFiber)
+    for (; newIdx < newChildren.length; newIdx++) {
+      const newFiber = updateFromMap( existingChildren, returnFiber,  newIdx, newChildren[newIdx]);
+      if (newFiber) {
+        if (newFiber.alternate) {
+          // 复用的节点在map内删掉，最后没被删掉的就是多余的节点
+          existingChildren.delete((newFiber.key === null || newFiber === undefined) ? newIdx : newFiber.key);
         }
-        // 旧fiber存在但是新fiber并没有复用旧fiber
-        if (oldFiber && !newFiber.alternate) {
-          deleteChild(returnFiber, oldFiber)
-        }
-        // 给当前新fiber添加flags
-        palceChild(newFiber, newIdx)
+        lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIdx)
         if (!previousNewFiber) {
           resultingFirstChild = newFiber
         } else {
           previousNewFiber.sibling = newFiber
         }
         previousNewFiber = newFiber
-        oldFiber = nextOldFiber
       }
     }
+    // 未被复用的旧节点标记为删除
+    existingChildren.forEach(child => deleteChild(returnFiber, child));
     return resultingFirstChild
+  }
+
+  function mapRemainingChildren(returnFiber, currentFirstChild) {
+    const existingChildren= new Map();
+    let existingChild = currentFirstChild;
+    while (existingChild) {
+      if (existingChild.key !== null && existingChild.key !== undefined) {
+        existingChildren.set(existingChild.key, existingChild);
+      } else {
+        existingChildren.set(existingChild.index, existingChild);
+      }
+      existingChild = existingChild.sibling;
+    }
+    return existingChildren;
+
   }
 
   function useFiber(oldFiber, pendingProps) {
